@@ -1,0 +1,15 @@
+{
+  "name": "zaher/products-manager",
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Mohammed Zaher",
+      "email": "mohammedzaherr0@gmail.com"
+    }
+  ],
+  "require": {}
+}
