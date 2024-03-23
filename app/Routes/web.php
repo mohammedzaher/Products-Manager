@@ -1,9 +1,9 @@
 <?php
 
 use App\Core\Router;
-use App\Controllers\HomeController;
+use App\Controllers\ProductController;
 
 $router = new Router();
-$router->get('/', HomeController::class, 'index');
+$router->get('/', ProductController::class, 'list');
 
 $router->dispatch();
