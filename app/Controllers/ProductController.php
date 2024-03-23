@@ -31,4 +31,12 @@ class ProductController extends Controller
 
         $this->render('list', $data);
     }
+
+    public function add()
+    {
+        $data['title'] = 'Product Add';
+        $data['types'] = (new Category())->getAll();
+
+        $this->render('add', $data);
+    }
 }
