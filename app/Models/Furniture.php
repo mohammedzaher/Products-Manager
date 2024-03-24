@@ -6,6 +6,8 @@ use App\Models\Product;
 
 class Furniture extends Product
 {
+    public static $attributes = ["height", "width", "length"];
+
     public function getAll()
     {
         return $this->joinAll('furniture');

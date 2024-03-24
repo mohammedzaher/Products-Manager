@@ -6,6 +6,8 @@ use App\Models\Product;
 
 class Book extends Product
 {
+    public static $attributes = ["weight"];
+
     public function getAll()
     {
         return $this->joinAll('book');

@@ -12,4 +12,9 @@ class Category extends Model
     {
         return $this->findAll("category");
     }
+
+    public function findOneById($id)
+    {
+        return $this->findOne("category", $id);
+    }
 }

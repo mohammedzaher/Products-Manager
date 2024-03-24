@@ -6,7 +6,7 @@ abstract class Model
 {
     protected function insert($tableName, $data)
     {
-        $attributes = $tableName::$attributes;
+        $attributes = ('App\Models\\'.$tableName)::$attributes;
 
         $sql = "INSERT INTO " . strtolower($tableName) . " (" . join(", ", $attributes) . ") VALUES (:". join(", :", $attributes) . ")";
 
@@ -23,9 +23,9 @@ abstract class Model
 
     protected function findOne($tableName, $id)
     {
-        $sql = "SELECT * FROM ". strtolower($tableName) . "WHERE id = :id";
+        $sql = "SELECT * FROM ". strtolower($tableName) . " WHERE id = :id";
         $query = Database::getBdd()->prepare($sql);
-        $query->execute($id);
+        $query->execute(['id' => $id]);
         return $query->fetch();
     }
 
