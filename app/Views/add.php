@@ -4,94 +4,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <title><?= $data['title']?></title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 </head>
 
 <body>
-  <main>
-    <div class="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div class="w-full max-w-md space-y-8">
-
-        <form action="/addproduct" method="POST">
-          <div class="space-y-12">
-            <div class="border-b border-gray-900/10 pb-12">
-              <h2 class="text-base font-semibold leading-7 text-gray-900">Add Product</h2>
-              <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div class="sm:col-span-4">
-                  <label for="sku" class="block text-sm font-medium leading-6 text-gray-900">SKU</label>
-                  <div class="mt-2">
-                    <input type="text" name="sku" id="sku" autocomplete="sku"
-                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                  </div>
+  <header>
+    <div class="container">
+      <div class="d-flex flex-row justify-content-between col-md-12 p-3 pb-1">
+        <div>
+          <h1 class="page-header"> <?php echo $title; ?> </h1>
+        </div>
+        <div class="page-btn-container">
+          <button class="btn btn-primary m-3">Save</button>
+          <a href="/" class="btn btn-danger m-3">Cancel</a>
+        </div>
+      </div>
+      <hr class="m-1">
+    </div>
+  </header>
+  <div id="app">
+    <main>
+      <div class="container">
+        <div class="col-md-12 py-5">
+          <form>
+            <div class="col-md-5 mb-3">
+              <div class="row">
+                <label for="sku" class="col-md-4 col-form-label-lg p-1 px-3">SKU</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="sku" required>
                 </div>
+              </div>
+            </div>
 
-                <div class="sm:col-span-4">
-                  <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
-                  <div class="mt-2">
-                    <input type="text" name="name" id="name" autocomplete="name"
-                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                  </div>
+            <div class="col-md-5 mb-3">
+              <div class="row">
+                <label for="name" class="col-md-4 col-form-label-lg p-1 px-3">Name</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="name" required>
                 </div>
+              </div>
+            </div>
 
-                <div class="sm:col-span-4">
-                  <label for="price" class="block text-sm font-medium leading-6 text-gray-900">Price</label>
-                  <div class="mt-2">
-                    <input id="price" name="price" type="text" autocomplete="price"
-                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                  </div>
+            <div class="col-md-5 mb-3">
+              <div class="row">
+                <label for="price" class="col-md-4 col-form-label-lg p-1 px-3">Price ($)</label>
+                <div class="col-md-8">
+                  <input type="number" class="form-control" id="price" required>
                 </div>
+              </div>
+            </div>
 
-                <div class="sm:col-span-4">
-                  <label for="type" class="block text-sm font-medium leading-6 text-gray-900">Type</label>
-                  <div class="mt-2">
-                    <select id="type" name="type" autocomplete="type"
-                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                      <option>DVD</option>
-                      <option>Book</option>
-                      <option>Furniture</option>
-                    </select>
-                  </div>
+            <div class="col-md-5 mb-3">
+              <div class="row">
+                <label for="productType" class="col-md-5 col-form-label-lg p-1 px-3"> Type Switcher </label>
+                <div class="col-md-7">
+                  <select id="productType" class="form-select" @change="changeType()">
+                    <option selected disabled>Type Switcher</option>
+                    <option v-for="type in types" :key="type.id">{{type.name}}</option>
+                  </select>
                 </div>
+              </div>
+            </div>
 
-                <div class="sm:col-span-2 sm:col-start-1">
-                  <label for="height" class="block text-sm font-medium leading-6 text-gray-900">Height</label>
-                  <div class="mt-2">
-                    <input type="text" name="height" id="height" autocomplete="height"
-                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                  </div>
-                </div>
-
-                <div class="sm:col-span-2">
-                  <label for="width" class="block text-sm font-medium leading-6 text-gray-900">Width</label>
-                  <div class="mt-2">
-                    <input type="text" name="width" id="width" autocomplete="width"
-                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                  </div>
-                </div>
-
-                <div class="sm:col-span-2">
-                  <label for="length" class="block text-sm font-medium leading-6 text-gray-900">Length</label>
-                  <div class="mt-2">
-                    <input type="text" name="length" id="length" autocomplete="length"
-                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            <div v-if="productType === 'Book'">
+              <div class="col-md-5 mb-3">
+                <div class="row">
+                  <label for="weight" class="col-md-4 col-form-label-lg p-1 px-3">Weight (KG)</label>
+                  <div class="col-md-8">
+                    <input type="number" class="form-control" id="weight" required>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div class="mt-6 flex items-center justify-end gap-x-6">
-            <a href='/' class="text-sm font-semibold leading-6 text-gray-900">Cancel</a>
-            <button type="submit"
-              class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
-          </div>
-        </form>
-
+            <div v-if="productType === 'DVD'">
+              <div class="col-md-5 mb-3">
+                <div class="row">
+                  <label for="size" class="col-md-4 col-form-label-lg p-1 px-3">Size (MB)</label>
+                  <div class="col-md-8">
+                    <input type="number" class="form-control" id="size" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="productType === 'Furniture'">
+              <div class="col-md-5 mb-3">
+                <div class="row">
+                  <label for="height" class="col-md-4 col-form-label-lg p-1 px-3">Height (CM)</label>
+                  <div class="col-md-8">
+                    <input type="number" class="form-control" id="height" required>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5 mb-3">
+                <div class="row">
+                  <label for="width" class="col-md-4 col-form-label-lg p-1 px-3">Width (CM)</label>
+                  <div class="col-md-8">
+                    <input type="number" class="form-control" id="width" required>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5 mb-3">
+                <div class="row">
+                  <label for="length" class="col-md-4 col-form-label-lg p-1 px-3">Length (CM)</label>
+                  <div class="col-md-8">
+                    <input type="number" class="form-control" id="length" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
+  </div>
 
+  <footer id="footer">
+    <div class="container">
+      <hr class="m-1 mb-4">
+      <p class="text-center"> Scandiweb Test Assignment </p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <script type="module">
+  let app = Vue.createApp({
+    data() {
+      return {
+        types: <?= json_encode($data["types"]) ?>,
+        productsDetails: {},
+        productType: "",
+        productTypeFeedback: ""
+      }
+    },
+    methods: {
+      changeType() {
+        let typeSwitcher = document.querySelector("#productType");
+        this.productType = typeSwitcher.options[typeSwitcher.selectedIndex].value;
+      },
+    }
+  })
+  app.mount('#app')
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+  </script>
 </body>
 
 </html>

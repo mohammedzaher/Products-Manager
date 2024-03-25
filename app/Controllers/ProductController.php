@@ -36,6 +36,9 @@ class ProductController extends Controller
     {
         $data['title'] = 'Product Add';
         $data['types'] = (new Category())->getAll();
+        foreach($data['types'] as $key => $type) {
+            $data['types'][$key]['attributes'] = ('App\Models\\' . $type['name'])::$attributes;
+        }
 
         $this->render('add', $data);
     }
