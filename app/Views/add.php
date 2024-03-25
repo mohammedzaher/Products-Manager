@@ -10,21 +10,22 @@
 </head>
 
 <body>
-  <header>
-    <div class="container">
-      <div class="d-flex flex-row justify-content-between col-md-12 p-3 pb-1">
-        <div>
-          <h1 class="page-header"> <?php echo $title; ?> </h1>
-        </div>
-        <div class="page-btn-container">
-          <button class="btn btn-primary m-3">Save</button>
-          <a href="/" class="btn btn-danger m-3">Cancel</a>
-        </div>
-      </div>
-      <hr class="m-1">
-    </div>
-  </header>
   <div id="app">
+    <header>
+      <div class="container">
+        <div class="d-flex flex-row justify-content-between col-md-12 p-3 pb-1">
+          <div>
+            <h1 class="page-header"> <?php echo $title; ?> </h1>
+          </div>
+          <div class="page-btn-container">
+            <button @click.prevent="saveProduct" class="btn btn-primary m-3">Save</button>
+            <a href="/" class="btn btn-danger m-3">Cancel</a>
+          </div>
+        </div>
+        <hr class="m-1">
+      </div>
+    </header>
+
     <main>
       <div class="container">
         <div class="col-md-12 py-5">
@@ -118,14 +119,15 @@
         </div>
       </div>
     </main>
-  </div>
 
-  <footer id="footer">
-    <div class="container">
-      <hr class="m-1 mb-4">
-      <p class="text-center"> Scandiweb Test Assignment </p>
-    </div>
-  </footer>
+
+    <footer id="footer">
+      <div class="container">
+        <hr class="m-1 mb-4">
+        <p class="text-center"> Scandiweb Test Assignment </p>
+      </div>
+    </footer>
+  </div>
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
@@ -144,6 +146,45 @@
         let typeSwitcher = document.querySelector("#productType");
         this.productType = typeSwitcher.options[typeSwitcher.selectedIndex].value;
       },
+      saveProduct() {
+        let sku = document.querySelector('#sku').value;
+        let name = document.querySelector('#name').value;
+        let price = document.querySelector('#price').value;
+        let productType = this.productType;
+        let size, weight, height, width, length;
+
+        if (productType === 'Book') {
+          weight = document.querySelector('#weight').value;
+        } else if (productType === 'DVD') {
+          size = document.querySelector('#size').value;
+        } else if (productType === 'Furniture') {
+          height = document.querySelector("#height").value;
+          width = document.querySelector("#width").value;
+          length = document.querySelector("#length").value;
+        }
+
+        let body = {
+          sku: sku,
+          name: name,
+          price: price,
+          type: productType,
+          size: size,
+          weight: weight,
+          height: height,
+          width: width,
+          length: length
+        };
+
+        fetch(window.location.origin + '/addproduct', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        }).then(response => response.json())
+
+        // window.location.href = window.location.origin;
+      }
     }
   })
   app.mount('#app')

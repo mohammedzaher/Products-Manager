@@ -60,8 +60,7 @@ class ProductController extends Controller
         }
 
         $statement = $product->add($data);
-        var_dump($statement);
-        die();
+        return;
     }
 
     public function delete()
