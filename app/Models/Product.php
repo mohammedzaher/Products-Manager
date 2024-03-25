@@ -29,6 +29,12 @@ abstract class Product extends Model
         return $query->fetchAll();
     }
 
+    public function delete($id)
+    {
+        $sql = "DELETE FROM product WHERE id = :id";
+        $query = Database::getBdd()->prepare($sql);
+        return $query->execute(['id' => $id]);
+    }
     private function getLastProductId()
     {
         $sql = "SELECT * FROM product ORDER BY id DESC LIMIT 1";

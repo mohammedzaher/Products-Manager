@@ -10,4 +10,10 @@ abstract class Controller
 
         include ROOT . "app/Views/$view.php";
     }
+
+    protected function getRequestBody()
+    {
+        $BODY = json_decode(file_get_contents('php://input'), true);
+        return $BODY;
+    }
 }

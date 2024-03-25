@@ -45,21 +45,36 @@ class ProductController extends Controller
 
     public function store()
     {
+        $BODY = $this->getRequestBody();
         $data = [
-            "sku" => $_POST["sku"],
-            "name" => $_POST["name"],
-            "price" => $_POST["price"],
+            "sku" => $BODY["sku"],
+            "name" => $BODY["name"],
+            "price" => $BODY["price"],
             "type" => 3,
         ];
 
         $type = (new Category())->findOneById($data["type"]);
         $product = new ('App\Models\\' . $type['name'])();
         foreach($product::$attributes as $attribute) {
-            $data[$attribute] = $_POST[$attribute];
+            $data[$attribute] = $BODY[$attribute];
         }
 
         $statement = $product->add($data);
         var_dump($statement);
         die();
+    }
+
+    public function delete()
+    {
+        $BODY = $this->getRequestBody();
+
+        $data = [
+            "id" => $BODY["id"],
+            "type" => $BODY["type"],
+        ];
+        $product = new ('App\Models\\' . $data["type"])();
+        $product->delete($data["id"]);
+
+        return;
     }
 }

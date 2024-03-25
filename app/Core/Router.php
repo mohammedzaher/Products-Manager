@@ -31,7 +31,7 @@ class Router
 
     public function delete($route, $controller, $action)
     {
-        $this->addRoute('Delete', $route, $controller, $action);
+        $this->addRoute('DELETE', $route, $controller, $action);
     }
 
     public function patch($route, $controller, $action)

@@ -10,22 +10,24 @@
 </head>
 
 <body>
-  <header>
-    <div class="container">
-      <div class="d-flex flex-row justify-content-between col-md-12 p-3 pb-1">
-        <div>
-          <h1 class="page-header"> <?php echo $title; ?> </h1>
-        </div>
-        <div class="page-btn-container">
-          <a href="/addproduct" class="btn btn-primary m-3"> ADD </a>
-          <button type="button" v-if="true" @click.prevent="deleteProducts" class="btn btn-danger m-3"
-            id="delete-product-btn"> MASS DELETE </button>
-        </div>
-      </div>
-      <hr class="m-1">
-    </div>
-  </header>
+
   <div id="app">
+
+    <header>
+      <div class="container">
+        <div class="d-flex flex-row justify-content-between col-md-12 p-3 pb-1">
+          <div>
+            <h1 class="page-header"> <?php echo $title ?> </h1>
+          </div>
+          <div class="page-btn-container">
+            <a href="/addproduct" class="btn btn-primary m-3"> ADD </a>
+            <button type="button" @click.prevent="deleteProducts" class="btn btn-danger m-3" id="delete-product-btn">
+              MASS DELETE </button>
+          </div>
+        </div>
+        <hr class="m-1">
+      </div>
+    </header>
     <main>
       <div class="container">
         <div class="d-flex flex-wrap col-m d-12">
@@ -49,14 +51,15 @@
         </div>
       </div>
     </main>
+
+    <footer id="footer">
+      <div class="container">
+        <hr class="m-1 mb-4">
+        <p class="text-center"> Scandiweb Test Assignment </p>
+      </div>
+    </footer>
   </div>
 
-  <footer id="footer">
-    <div class="container">
-      <hr class="m-1 mb-4">
-      <p class="text-center"> Scandiweb Test Assignment </p>
-    </div>
-  </footer>
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
@@ -68,9 +71,30 @@
       }
     },
     methods: {
-      addProduct() {
-        window.location.href = window.location.origin + "/addProduct/"
-      },
+      deleteProducts() {
+        let productsToDelete = []
+        document.querySelectorAll('.delete-checkbox').forEach((checkbox) => {
+          if (checkbox.checked) {
+            productsToDelete.push(checkbox)
+          }
+        })
+
+        productsToDelete.forEach((product) => {
+          console.log(window.location.origin + "/deleteProduct")
+          fetch(window.location.origin + "/deleteProduct", {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              id: product.id,
+              type: this.products[product.id].type
+            })
+          }).then(response => response.json())
+
+          delete this.products[product.id]
+        })
+      }
     }
   })
   app.mount('#app')
