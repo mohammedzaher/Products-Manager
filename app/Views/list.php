@@ -80,8 +80,7 @@
         })
 
         productsToDelete.forEach((product) => {
-          console.log(window.location.origin + "/deleteProduct")
-          fetch(window.location.origin + "/deleteProduct", {
+          fetch(window.location.origin + "/product", {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json'

@@ -180,6 +180,7 @@
         return (document.querySelectorAll(".is-invalid").length === 0);
       },
       saveProduct() {
+        console.log('save product');
         let sku = document.querySelector('#sku').value;
         let name = document.querySelector('#name').value;
         let price = document.querySelector('#price').value;
@@ -210,7 +211,7 @@
 
         this.validate(body);
 
-        fetch(window.location.origin + '/addproduct', {
+        fetch(window.location.origin + '/product', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
