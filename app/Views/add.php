@@ -65,7 +65,11 @@
                     <option selected disabled>Type Switcher</option>
                     <option v-for="type in types" :key="type.id">{{type.name}}</option>
                   </select>
+                  <div class="text-center pt-1">
+                    {{productTypeFeedback}}
+                  </div>
                 </div>
+
               </div>
             </div>
 
@@ -158,6 +162,22 @@
       changeType() {
         let typeSwitcher = document.querySelector("#productType");
         this.productType = typeSwitcher.options[typeSwitcher.selectedIndex].value;
+
+        typeSwitcher.classList.remove("is-invalid");
+        this.productTypeFeedback = "";
+      },
+      validate(data) {
+        for (let key in data) {
+          if (data[key] === "") {
+            if (key === "type") {
+              let typeSwitcher = document.querySelector("#productType");
+              typeSwitcher.classList.add("is-invalid");
+              this.productTypeFeedback = "Please, select product type.";
+            }
+          }
+        }
+
+        return (document.querySelectorAll(".is-invalid").length === 0);
       },
       saveProduct() {
         let sku = document.querySelector('#sku').value;
@@ -188,6 +208,8 @@
           length: length
         };
 
+        this.validate(body);
+
         fetch(window.location.origin + '/addproduct', {
           method: 'POST',
           headers: {
@@ -196,7 +218,7 @@
           body: JSON.stringify(body)
         }).then(response => response.json())
 
-        window.location.href = window.location.origin;
+        // window.location.href = window.location.origin;
       }
     }
   })
