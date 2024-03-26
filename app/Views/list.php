@@ -28,23 +28,20 @@
         <hr class="m-1">
       </div>
     </header>
-    <main>
+
+    <main style="min-height: 80vh;">
       <div class="container">
-        <div class="d-flex flex-wrap col-m d-12">
-          <div class="row">
-            <div v-for="product in products" :key="product.id" class="col-md-6 col-lg-3 mt-4 mb-4">
-              <div class="product-card">
-                <div class="card text-center border-black pb-5">
-                  <div class="card-body d-flex flex-column">
-                    <div class="d-flex justify-content-start mb-2">
-                      <input class="delete-checkbox" :id="product.id" type="checkbox" value="">
-                    </div>
-                    <div> {{ product.sku }} </div>
-                    <div> {{ product.name }} </div>
-                    <div> {{ product.price }} $ </div>
-                    <div> {{ product.details }} </div>
-                  </div>
+        <div class="d-flex flex-wrap row col-md-12">
+          <div v-for="product in products" :key="product.id" class="col-md-3 mt-4 mb-4">
+            <div class="card text-center pb-5">
+              <div class="card-body d-flex flex-column">
+                <div class="d-flex justify-content-start mb-2">
+                  <input class="delete-checkbox" :id="product.id" type="checkbox" value="">
                 </div>
+                <div> {{ product.sku }} </div>
+                <div> {{ product.name }} </div>
+                <div> {{ product.price }} $ </div>
+                <div> {{ product.details }} </div>
               </div>
             </div>
           </div>
