@@ -61,7 +61,7 @@
               <div class="row">
                 <label for="productType" class="col-md-5 col-form-label-lg p-1 px-3"> Type Switcher </label>
                 <div class="col-md-7">
-                  <select id="productType" class="form-select" @change="changeType()">
+                  <select id="productType" class="form-select" @change="changeType">
                     <option selected disabled>Type Switcher</option>
                     <option v-for="type in types" :key="type.id">{{type.name}}</option>
                   </select>
@@ -78,6 +78,9 @@
                   </div>
                 </div>
               </div>
+              <div class="col-md-5 mb-3">
+                <p class="text-center">Please, provide weight in KG.</p>
+              </div>
             </div>
             <div v-if="productType === 'DVD'">
               <div class="col-md-5 mb-3">
@@ -88,8 +91,12 @@
                   </div>
                 </div>
               </div>
+              <div class="col-md-5 mb-3">
+                <p class="text-center">Please, provide size in MB.</p>
+              </div>
             </div>
             <div v-if="productType === 'Furniture'">
+
               <div class="col-md-5 mb-3">
                 <div class="row">
                   <label for="height" class="col-md-4 col-form-label-lg p-1 px-3">Height (CM)</label>
@@ -98,6 +105,7 @@
                   </div>
                 </div>
               </div>
+
               <div class="col-md-5 mb-3">
                 <div class="row">
                   <label for="width" class="col-md-4 col-form-label-lg p-1 px-3">Width (CM)</label>
@@ -106,6 +114,7 @@
                   </div>
                 </div>
               </div>
+
               <div class="col-md-5 mb-3">
                 <div class="row">
                   <label for="length" class="col-md-4 col-form-label-lg p-1 px-3">Length (CM)</label>
@@ -113,6 +122,10 @@
                     <input type="number" class="form-control" id="length" required>
                   </div>
                 </div>
+              </div>
+
+              <div class="col-md-5 mb-3">
+                <p class="text-center">Please, provide dimensions in HxWxL format.</p>
               </div>
             </div>
           </form>
@@ -183,7 +196,7 @@
           body: JSON.stringify(body)
         }).then(response => response.json())
 
-        // window.location.href = window.location.origin;
+        window.location.href = window.location.origin;
       }
     }
   })
