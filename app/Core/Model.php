@@ -8,8 +8,11 @@ abstract class Model
     {
         $attributes = ('App\Models\\'.$tableName)::$attributes;
 
-        $sql = "INSERT INTO " . strtolower($tableName) . " (" . join(", ", $attributes) . ") VALUES (:". join(", :", $attributes) . ")";
+        if($tableName != 'Product') {
+            array_push($attributes, 'id');
+        }
 
+        $sql = "INSERT INTO " . strtolower($tableName) . " (" . join(", ", $attributes) . ") VALUES (:". join(", :", $attributes) . ")";
         $query = Database::getBdd()->prepare($sql);
 
         $bindings = array();
@@ -26,6 +29,14 @@ abstract class Model
         $sql = "SELECT * FROM ". strtolower($tableName) . " WHERE id = :id";
         $query = Database::getBdd()->prepare($sql);
         $query->execute(['id' => $id]);
+        return $query->fetch();
+    }
+
+    protected function findOneByColumn($tableName, $column, $value)
+    {
+        $sql = "SELECT * FROM ". strtolower($tableName) . " WHERE $column = :$column";
+        $query = Database::getBdd()->prepare($sql);
+        $query->execute(["$column" => $value]);
         return $query->fetch();
     }
 

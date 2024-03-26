@@ -17,4 +17,9 @@ class Category extends Model
     {
         return $this->findOne("category", $id);
     }
+
+    public function findOneByName($name)
+    {
+        return $this->findOneByColumn("category", "Name", $name);
+    }
 }

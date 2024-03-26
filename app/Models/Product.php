@@ -11,10 +11,10 @@ abstract class Product extends Model
 
     public function add($data)
     {
-        $statement = $this->insert("product", $data);
+        $statement = $this->insert("Product", $data);
         $type = $this->findOne("category", $data["type"]);
-        if($statement && $type) {
-            return $this->insert(strtolower($type['name']), array_merge($data, ["id" => $this->getLastProductId()]));
+        if($statement) {
+            return $this->insert($type['name'], array_merge($data, ["id" => $this->getLastProductId()]));
         } else {
             return false;
         }

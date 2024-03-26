@@ -50,10 +50,9 @@ class ProductController extends Controller
             "sku" => $BODY["sku"],
             "name" => $BODY["name"],
             "price" => $BODY["price"],
-            "type" => 3,
         ];
-
-        $type = (new Category())->findOneById($data["type"]);
+        $type = (new Category())->findOneByName($BODY["type"]);
+        $data["type"] = $type['id'];
         $product = new ('App\Models\\' . $type['name'])();
         foreach($product::$attributes as $attribute) {
             $data[$attribute] = $BODY[$attribute];
