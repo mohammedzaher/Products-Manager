@@ -7,10 +7,15 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <title><?= $data['title']?></title>
+  <style>
+  [v-cloak] {
+    display: none;
+  }
+  </style>
 </head>
 
 <body>
-  <div id="app">
+  <div id="app" v-cloak>
     <header>
       <div class="container">
         <div class="d-flex flex-row justify-content-between col-md-12 p-3 pb-1">
@@ -74,13 +79,38 @@
     </footer>
   </div>
 
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/vue@3"></script>
 
   <script type="module">
-  import productInput from '/../assets/components/productInput.js';
   let app = Vue.createApp({
     components: {
-      'product-input': productInput
+      'product-input': {
+        name: 'productInput',
+        props: ['name', 'label', 'type', 'value', 'feedback'],
+        template: `
+                <div class="col-md-5 mb-3">
+                  <div class="row">
+                    <label :for="name" class="col-md-4 col-form-label-lg p-1 px-3">{{label}}</label>
+                    <div class="col-md-8">
+                      <input :type="type" v-model="inputValue" class="form-control" :id="name" :placeholder="label" required>
+                      <div class="text-danger text-center"> 
+                        {{feedback}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+      `,
+        computed: {
+          inputValue: {
+            get() {
+              return this.value;
+            },
+            set(value) {
+              this.$emit('update-input-value', this.name, value);
+            },
+          },
+        },
+      }
     },
     data() {
       return {
@@ -108,55 +138,55 @@
           }
         },
         productsDetails: {
-          "Book": {
-            "attributes": {
-              "weight": {
-                "name": "weight",
-                "label": "Weight (KG)",
-                "type": "number",
-                "value": "",
-                "feedback": ""
+          Book: {
+            attributes: {
+              weight: {
+                name: "weight",
+                label: "Weight (KG)",
+                type: "number",
+                value: "",
+                feedback: ""
               }
             },
-            "description": "Please, provide weight in KG"
+            description: "Please, provide weight in KG"
           },
-          "DVD": {
-            "attributes": {
-              "size": {
-                "name": "size",
-                "label": "Size (MB)",
-                "type": "number",
-                "value": "",
-                "feedback": ""
+          DVD: {
+            attributes: {
+              size: {
+                name: "size",
+                label: "Size (MB)",
+                type: "number",
+                value: "",
+                feedback: ""
               }
             },
-            "description": "Please, provide size in MB"
+            description: "Please, provide size in MB"
           },
-          "Furniture": {
-            "attributes": {
-              "height": {
-                "name": "height",
-                "label": "Height (CM)",
-                "type": "number",
-                "value": "",
-                "feedback": ""
+          Furniture: {
+            attributes: {
+              height: {
+                name: "height",
+                label: "Height (CM)",
+                type: "number",
+                value: "",
+                feedback: ""
               },
-              "width": {
-                "name": "width",
-                "label": "Width (CM)",
-                "type": "number",
-                "value": "",
-                "feedback": ""
+              width: {
+                name: "width",
+                label: "Width (CM)",
+                type: "number",
+                value: "",
+                feedback: ""
               },
-              "length": {
-                "name": "length",
-                "label": "Length (CM)",
-                "type": "number",
-                "value": "",
-                "feedback": ""
+              length: {
+                name: "length",
+                label: "Length (CM)",
+                type: "number",
+                value: "",
+                feedback: ""
               }
             },
-            "description": "Please, provide dimensions in HxWxL format"
+            description: "Please, provide dimensions in HxWxL format"
           }
         },
         types: <?= json_encode($data["types"]) ?>,
