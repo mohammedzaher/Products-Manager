@@ -51,14 +51,51 @@ class ProductController extends Controller
             "name" => $BODY["name"],
             "price" => $BODY["price"],
         ];
+
+        if(!$BODY["type"]) {
+            echo json_encode(array(
+                "message" => "Please, select product type."
+            ));
+            return;
+        }
+
         $type = (new Category())->findOneByName($BODY["type"]);
+
+        if(!$type) {
+            echo json_encode(array(
+                "message" => "Invalid Product Type"
+            ));
+            return;
+        }
+
         $data["type"] = $type['id'];
         $product = new ('App\Models\\' . $type['name'])();
         foreach($product::$attributes as $attribute) {
             $data[$attribute] = $BODY[$attribute];
         }
 
+        $missingParameters = $this->getMissingParameters($data);
+
+        if (count($missingParameters) > 0) {
+            echo json_encode(array(
+                "message" => "Missing Parameters: " . join(", ", $missingParameters)
+            ));
+            return;
+        }
+
+        if($product->checkSKU($data["sku"])) {
+            echo json_encode(array(
+                "message" => "SKU Must be Unique for each product"
+            ));
+            return;
+        }
+
         $statement = $product->add($data);
+
+        echo json_encode(array(
+            "message" => $statement ? "Product Added Successfully" : "Failed to Add Product"
+        ));
+
         return;
     }
 

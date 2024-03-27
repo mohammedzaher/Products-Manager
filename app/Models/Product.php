@@ -43,6 +43,15 @@ abstract class Product extends Model
         return $query->fetch()['id'];
     }
 
+    public function checkSKU($sku)
+    {
+        $sql = "SELECT * FROM product WHERE sku = ?";
+        $query = Database::getBdd()->prepare($sql);
+        $query->execute([$sku]);
+
+        return !empty($query->fetchAll());
+    }
+
     abstract public function getDetails($product);
 
     abstract public function getAll();

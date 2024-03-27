@@ -43,7 +43,7 @@
                     <option selected disabled>Type Switcher</option>
                     <option v-for="type in types" :key="type.id">{{type.name}}</option>
                   </select>
-                  <div class="text-center pt-1">
+                  <div class="text-danger text-center pt-1">
                     {{productTypeFeedback}}
                   </div>
                 </div>
@@ -172,6 +172,19 @@
         typeSwitcher.classList.remove("is-invalid");
         this.productTypeFeedback = "";
       },
+      updateValue(inputId, value) {
+        let product = this.product[inputId] ?? this.productsDetails[this.productType].attributes[inputId];
+        product.value = value;
+        let input = document.querySelector(`#${inputId}`);
+
+        if (product.type === "number" && value === "") {
+          input.classList.add("is-invalid");
+          product.feedback = `Please, provide numeric ${inputId}.`;
+        } else {
+          input.classList.remove("is-invalid");
+          product.feedback = "";
+        }
+      },
       validate(data) {
         for (let key in data) {
           if (data[key] === "") {
@@ -179,6 +192,15 @@
               let typeSwitcher = document.querySelector("#productType");
               typeSwitcher.classList.add("is-invalid");
               this.productTypeFeedback = "Please, select product type.";
+            } else {
+              let product = this.product[key] ?? this.productsDetails[this.productType].attributes[key];
+              document.querySelector("#" + key).classList.add("is-invalid")
+
+              if (product.type === "number") {
+                product.feedback = `Please, provide numeric ${key}.`
+              } else {
+                product.feedback = "Please, submit required data"
+              }
             }
           }
         }
@@ -215,17 +237,23 @@
           length: length
         };
 
-        this.validate(body);
-
-        fetch(window.location.origin + '/product', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
-        }).then(response => response.json())
-
-        // window.location.href = window.location.origin;
+        if (this.validate(body)) {
+          fetch(window.location.origin + '/product', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(body)
+            }).then(response => response.json())
+            .then(data => {
+              if (data.message === "SKU Must be Unique for each product") {
+                document.querySelector('#sku').classList.add("is-invalid");
+                this.product.sku.feedback = data.message;
+              } else {
+                window.location.href = window.location.origin;
+              }
+            })
+        }
       }
     }
   })

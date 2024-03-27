@@ -7,7 +7,7 @@ export default {
                     <label :for="name" class="col-md-4 col-form-label-lg p-1 px-3">{{label}}</label>
                     <div class="col-md-8">
                       <input :type="type" v-model="inputValue" class="form-control" :id="name" :placeholder="label" required>
-                      <div class="feedback"> 
+                      <div class="text-danger text-center"> 
                         {{feedback}}
                       </div>
                     </div>
