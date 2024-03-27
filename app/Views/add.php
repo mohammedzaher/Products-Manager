@@ -26,36 +26,14 @@
       </div>
     </header>
 
-    <main>
+    <main style="min-height: 80vh;">
       <div class="container">
         <div class="col-md-12 py-5">
-          <form>
-            <div class="col-md-5 mb-3">
-              <div class="row">
-                <label for="sku" class="col-md-4 col-form-label-lg p-1 px-3">SKU</label>
-                <div class="col-md-8">
-                  <input type="text" class="form-control" id="sku" required>
-                </div>
-              </div>
-            </div>
+          <form id="product_form">
 
-            <div class="col-md-5 mb-3">
-              <div class="row">
-                <label for="name" class="col-md-4 col-form-label-lg p-1 px-3">Name</label>
-                <div class="col-md-8">
-                  <input type="text" class="form-control" id="name" required>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-5 mb-3">
-              <div class="row">
-                <label for="price" class="col-md-4 col-form-label-lg p-1 px-3">Price ($)</label>
-                <div class="col-md-8">
-                  <input type="number" class="form-control" id="price" required>
-                </div>
-              </div>
-            </div>
+            <product-input v-for="(input, key) in product" :key="key" :name="input.name" :label="input.label"
+              :type="input.type" :value="input.value" :feedback="input.feedback" @update-input-value="updateValue">
+            </product-input>
 
             <div class="col-md-5 mb-3">
               <div class="row">
@@ -69,69 +47,19 @@
                     {{productTypeFeedback}}
                   </div>
                 </div>
-
               </div>
             </div>
 
-            <div v-if="productType === 'Book'">
+            <div v-if="productType">
+              <product-input v-for="(input, key) in productsDetails[productType].attributes" :key="key"
+                :name="input.name" :label="input.label" :type="input.type" :value="input.value"
+                :feedback="input.feedback" @update-input-value="updateValue">
+              </product-input>
               <div class="col-md-5 mb-3">
-                <div class="row">
-                  <label for="weight" class="col-md-4 col-form-label-lg p-1 px-3">Weight (KG)</label>
-                  <div class="col-md-8">
-                    <input type="number" class="form-control" id="weight" required>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-5 mb-3">
-                <p class="text-center">Please, provide weight in KG.</p>
+                <p class="text-center">{{productsDetails[productType].description}}</p>
               </div>
             </div>
-            <div v-if="productType === 'DVD'">
-              <div class="col-md-5 mb-3">
-                <div class="row">
-                  <label for="size" class="col-md-4 col-form-label-lg p-1 px-3">Size (MB)</label>
-                  <div class="col-md-8">
-                    <input type="number" class="form-control" id="size" required>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-5 mb-3">
-                <p class="text-center">Please, provide size in MB.</p>
-              </div>
-            </div>
-            <div v-if="productType === 'Furniture'">
 
-              <div class="col-md-5 mb-3">
-                <div class="row">
-                  <label for="height" class="col-md-4 col-form-label-lg p-1 px-3">Height (CM)</label>
-                  <div class="col-md-8">
-                    <input type="number" class="form-control" id="height" required>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-5 mb-3">
-                <div class="row">
-                  <label for="width" class="col-md-4 col-form-label-lg p-1 px-3">Width (CM)</label>
-                  <div class="col-md-8">
-                    <input type="number" class="form-control" id="width" required>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-5 mb-3">
-                <div class="row">
-                  <label for="length" class="col-md-4 col-form-label-lg p-1 px-3">Length (CM)</label>
-                  <div class="col-md-8">
-                    <input type="number" class="form-control" id="length" required>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-5 mb-3">
-                <p class="text-center">Please, provide dimensions in HxWxL format.</p>
-              </div>
-            </div>
           </form>
         </div>
       </div>
@@ -149,11 +77,89 @@
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
   <script type="module">
+  import productInput from '/../assets/components/productInput.js';
   let app = Vue.createApp({
+    components: {
+      'product-input': productInput
+    },
     data() {
       return {
+        product: {
+          sku: {
+            name: "sku",
+            label: "SKU",
+            type: "text",
+            value: "",
+            feedback: ""
+          },
+          name: {
+            name: "name",
+            label: "Name",
+            type: "text",
+            value: "",
+            feedback: ""
+          },
+          price: {
+            name: "price",
+            label: "Price ($)",
+            type: "number",
+            value: "",
+            feedback: ""
+          }
+        },
+        productsDetails: {
+          "Book": {
+            "attributes": {
+              "weight": {
+                "name": "weight",
+                "label": "Weight (KG)",
+                "type": "number",
+                "value": "",
+                "feedback": ""
+              }
+            },
+            "description": "Please, provide weight in KG"
+          },
+          "DVD": {
+            "attributes": {
+              "size": {
+                "name": "size",
+                "label": "Size (MB)",
+                "type": "number",
+                "value": "",
+                "feedback": ""
+              }
+            },
+            "description": "Please, provide size in MB"
+          },
+          "Furniture": {
+            "attributes": {
+              "height": {
+                "name": "height",
+                "label": "Height (CM)",
+                "type": "number",
+                "value": "",
+                "feedback": ""
+              },
+              "width": {
+                "name": "width",
+                "label": "Width (CM)",
+                "type": "number",
+                "value": "",
+                "feedback": ""
+              },
+              "length": {
+                "name": "length",
+                "label": "Length (CM)",
+                "type": "number",
+                "value": "",
+                "feedback": ""
+              }
+            },
+            "description": "Please, provide dimensions in HxWxL format"
+          }
+        },
         types: <?= json_encode($data["types"]) ?>,
-        productsDetails: {},
         productType: "",
         productTypeFeedback: ""
       }
