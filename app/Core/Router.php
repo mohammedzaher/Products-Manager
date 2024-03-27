@@ -58,7 +58,7 @@ class Router
     public function abort($statusCode = 404)
     {
         http_response_code($statusCode);
-        include "Views/$statusCode.php";
+        include ROOT . "app/Views/$statusCode.php";
         die();
     }
 
