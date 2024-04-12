@@ -59,6 +59,13 @@ class ProductController extends Controller
             return;
         }
 
+        if(!$BODY["price"] > 0) {
+            echo json_encode(array(
+                "message" => "Price must be greater than 0"
+            ));
+            return;
+        }
+
         $type = (new Category())->findOneByName($BODY["type"]);
 
         if(!$type) {

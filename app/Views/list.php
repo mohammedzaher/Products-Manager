@@ -15,7 +15,6 @@
 </head>
 
 <body>
-
   <div id="app" v-cloak>
 
     <header>
@@ -63,7 +62,10 @@
   </div>
 
 
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.min.js"
+    integrity="sha512-gEM2INjX66kRUIwrPiTBzAA6d48haC9kqrWZWjzrtnpCtBNxOXqXVFEeRDOeVC13pw4EOBrvlsJnNr2MXiQGvg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <script type="module">
   let app = Vue.createApp({

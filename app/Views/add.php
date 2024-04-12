@@ -79,7 +79,9 @@
     </footer>
   </div>
 
-  <script src="https://unpkg.com/vue@3"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.min.js"
+    integrity="sha512-gEM2INjX66kRUIwrPiTBzAA6d48haC9kqrWZWjzrtnpCtBNxOXqXVFEeRDOeVC13pw4EOBrvlsJnNr2MXiQGvg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <script type="module">
   let app = Vue.createApp({
@@ -215,9 +217,9 @@
           product.feedback = "";
         }
       },
-      validate(data) {
-        for (let key in data) {
-          if (data[key] === "") {
+      validate(body) {
+        for (let key in body) {
+          if (body[key] === "") {
             if (key === "type") {
               let typeSwitcher = document.querySelector("#productType");
               typeSwitcher.classList.add("is-invalid");
@@ -234,11 +236,24 @@
             }
           }
         }
+        let numericInputs = ['price'];
+        if (this.productType) {
+          for (let input in this.productsDetails[this.productType].attributes) {
+            numericInputs.push(input);
+          }
+        }
+        numericInputs.forEach((input) => {
+          if (body[input] <= 0 && body[input]) {
+            let product = this.product[input] ?? this.productsDetails[this.productType].attributes[input];
+            document.querySelector("#" + input).classList.add("is-invalid");
+            product.feedback = `${product.label.split(' ')[0]} must be greater than 0`;
+          }
+        })
+
 
         return (document.querySelectorAll(".is-invalid").length === 0);
       },
       saveProduct() {
-        console.log('save product');
         let sku = document.querySelector('#sku').value;
         let name = document.querySelector('#name').value;
         let price = document.querySelector('#price').value;
@@ -279,6 +294,9 @@
               if (data.message === "SKU Must be Unique for each product") {
                 document.querySelector('#sku').classList.add("is-invalid");
                 this.product.sku.feedback = data.message;
+              } else if (data.message === "Price must be greater than 0") {
+                document.querySelector('#price').classList.add("is-invalid");
+                this.product.price.feedback = data.message;
               } else {
                 window.location.href = window.location.origin;
               }
