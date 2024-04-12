@@ -297,6 +297,12 @@
               } else if (data.message === "Price must be greater than 0") {
                 document.querySelector('#price').classList.add("is-invalid");
                 this.product.price.feedback = data.message;
+              } else if (data.message === "SKU must be less than 255 characters") {
+                document.querySelector('#sku').classList.add("is-invalid");
+                this.product.sku.feedback = data.message;
+              } else if (data.message === "Product Name must be less than 255 characters") {
+                document.querySelector('#name').classList.add("is-invalid");
+                this.product.name.feedback = data.message;
               } else {
                 window.location.href = window.location.origin;
               }

@@ -52,6 +52,21 @@ class ProductController extends Controller
             "price" => $BODY["price"],
         ];
 
+
+        if(strlen($BODY["sku"]) > 255) {
+            echo json_encode(array(
+                "message" => "SKU must be less than 255 characters"
+            ));
+            return;
+        }
+
+        if(strlen($BODY["name"]) > 255) {
+            echo json_encode(array(
+                "message" => "Product Name must be less than 255 characters"
+            ));
+            return;
+        }
+
         if(!$BODY["type"]) {
             echo json_encode(array(
                 "message" => "Please, select product type."
